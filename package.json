@@ -1,0 +1,23 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "gendiff",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serjio89/frontend-project-46.git"
+  },
+  "author": "Serjio Rubtsov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Serjio89/frontend-project-46/issues"
+  },
+  "homepage": "https://github.com/Serjio89/frontend-project-46#readme",
+  "dependencies": {
+    "commander": "^10.0.0"
+  }
+}
