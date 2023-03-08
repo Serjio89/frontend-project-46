@@ -25,4 +25,5 @@ const formatTree = (tree, path = '') => {
   return formattedNodes.join('\n');
 };
 const diffPlain = (tree) => formatTree(tree);
+
 export default diffPlain;

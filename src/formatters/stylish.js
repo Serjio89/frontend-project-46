@@ -1,7 +1,5 @@
-import _ from 'lodash';
 import chalk from 'chalk';
-import { stringify } from '../utils.js';
-
+import _ from 'lodash';
 
 const replacer = ' ';
 const signSpace = 2;
@@ -12,6 +10,14 @@ const indent = (depth, isFull = true) => {
   return isFull ? replacer.repeat(size) : replacer.repeat(size - signSpace);
 };
 
+const stringify = (data, depth) => {
+  if (!_.isObject(data)) { return String(data); }
+
+  const lines = Object
+    .entries(data)
+    .map(([key, value]) => `${indent(depth + 1)}${key}: ${stringify(value, depth + 1)}`);
+  return `{\n${lines.join('\n')}\n${indent(depth)}}`;
+};
 const formatNode = (prefix, color, node, depth) => {
   const line = `${indent(depth, false)}${prefix} ${node.key}: ${stringify(node.value, depth)}`;
   return color ? chalk[color](line) : line;
@@ -26,10 +32,6 @@ const formatTree = (tree, depth = 1) => tree
       case 'deleted': {
         return formatNode('-', 'red', node, depth);
       }
-      case 'changed': {
-      }
-      case 'nested': {
-      }
       default:
         return formatNode(' ', null, node, depth);
     }
@@ -37,4 +39,4 @@ const formatTree = (tree, depth = 1) => tree
 
 const diffStylish = (tree) => `{\n${formatTree(tree).join('\n')}\n}`;
 
-export default diffStylish;
+export { diffStylish, indent, stringify };
