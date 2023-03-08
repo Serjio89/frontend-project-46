@@ -1,6 +1,6 @@
 import parser from './parsers.js';
 import { absoluthPath } from './utils.js';
-import compareObjects from './differenceTreeBuilder.js';
+import getDifference from './differenceTreeBuilder.js';
 import makeDiff from './formatters/index.js';
 
 const genDiff = (file1Name, file2Name, formatName = 'stylish') => {
@@ -10,7 +10,7 @@ const genDiff = (file1Name, file2Name, formatName = 'stylish') => {
   const file2Data = absoluthPath(file2Name, 'utf-8');
   const parsedData2 = parser(file2Data);
 
-  const dtb = compareObjects(parsedData1, parsedData2);
+  const dtb = getDifference(parsedData1, parsedData2);
   return makeDiff(dtb, formatName);
 };
 
