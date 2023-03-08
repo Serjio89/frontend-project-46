@@ -29,22 +29,22 @@ const getUnchangedNode = (data2, key) => ({
 });
 
 const getNodeType = (data1, data2, key) => {
+  let result;
+  
   if (!_.has(data1, key)) {
-    return getAddedNode(data2, key);
+    result = getAddedNode(data2, key);
+  } else if (!_.has(data2, key)) {
+    result = getDeletedNode(data1, key);
+  } else if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+    result = getNestedNode(data1, data2, key);
+  } else if (!_.isEqual(data1[key], data2[key])) {
+    result = getChangedNode(data1, data2, key);
+  } else {
+    result = getUnchangedNode(data2, key);
   }
-  if (!_.has(data2, key)) {
-    return getDeletedNode(data1, key);
-  }
-  if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-    return getNestedNode(data1, data2, key);
-  }
-  if (!_.isEqual(data1[key], data2[key])) {
-    return getChangedNode(data1, data2, key);
-  }
-  return getUnchangedNode(data2, key);
+  
+  return result;
 };
-
-
 
 const addNode = (key, value, depth) => ({
   key,
