@@ -2,29 +2,48 @@ import _ from 'lodash';
 import { stringify } from './utils.js';
 
 
+const getAddedNode = (data2, key) => ({
+  type: 'added',
+  value: data2[key]
+});
+
+const getDeletedNode = (data1, key) => ({
+  type: 'deleted',
+  value: data1[key]
+});
+
+const getNestedNode = (data1, data2, key) => ({
+  type: 'nested',
+  children: getDifference(data1[key], data2[key])
+});
+
+const getChangedNode = (data1, data2, key) => ({
+  type: 'changed',
+  value1: data1[key],
+  value2: data2[key]
+});
+
+const getUnchangedNode = (data2, key) => ({
+  type: 'unchanged',
+  value: data2[key]
+});
+
 const getNodeType = (data1, data2, key) => {
-  let result = {};
-
   if (!_.has(data1, key)) {
-    result.type = 'added';
-    result.value = data2[key];
-  } else if (!_.has(data2, key)) {
-    result.type = 'deleted';
-    result.value = data1[key];
-  } else if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-    result.type = 'nested';
-    result.children = getDifference(data1[key], data2[key]);
-  } else if (!_.isEqual(data1[key], data2[key])) {
-    result.type = 'changed';
-    result.value1 = data1[key];
-    result.value2 = data2[key];
-  } else {
-    result.type = 'unchanged';
-    result.value = data2[key];
+    return getAddedNode(data2, key);
   }
-
-  return result;
+  if (!_.has(data2, key)) {
+    return getDeletedNode(data1, key);
+  }
+  if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+    return getNestedNode(data1, data2, key);
+  }
+  if (!_.isEqual(data1[key], data2[key])) {
+    return getChangedNode(data1, data2, key);
+  }
+  return getUnchangedNode(data2, key);
 };
+
 
 
 const addNode = (key, value, depth) => ({
