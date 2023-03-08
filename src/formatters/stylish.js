@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import chalk from 'chalk';
 
 const replacer = ' ';
 const signSpace = 2;
@@ -17,28 +18,26 @@ const stringify = (data, depth) => {
     .map(([key, value]) => `${indent(depth + 1)}${key}: ${stringify(value, depth + 1)}`);
   return `{\n${lines.join('\n')}\n${indent(depth)}}`;
 };
+const formatNode = (prefix, color, node, depth) => {
+  const line = `${indent(depth, false)}${prefix} ${node.key}: ${stringify(node.value, depth)}`;
+  return color ? chalk[color](line) : line;
+};
 
 const formatTree = (tree, depth = 1) => tree
   .map((node) => {
     switch (node.type) {
       case 'added': {
-        return `${indent(depth, false)}+ ${node.key}: ${stringify(node.value, depth)}`;
+        return formatNode('+', 'green', node, depth);
       }
       case 'deleted': {
-        return `${indent(depth, false)}- ${node.key}: ${stringify(node.value, depth)}`;
+        return formatNode('-', 'red', node, depth);
       }
       case 'changed': {
-        return [
-          `${indent(depth, false)}- ${node.key}: ${stringify(node.value1, depth)}`,
-          `${indent(depth, false)}+ ${node.key}: ${stringify(node.value2, depth)}`,
-        ].join('\n');
       }
       case 'nested': {
-        const children = formatTree(node.children, depth + 1).join('\n');
-        return `${indent(depth)}${node.key}: {\n${children}\n${indent(depth)}}`;
       }
       default:
-        return `${indent(depth)}${node.key}: ${stringify(node.value, depth)}`;
+        return formatNode(' ', null, node, depth);
     }
   });
 
