@@ -1,5 +1,5 @@
 import path from 'path';
-import { readFileSync } from 'node:fs';
+import { readFileSync } from 'fs';
 
 const absoluthPath = (fileName) => path.resolve(process.cwd(), fileName);
 

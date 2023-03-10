@@ -1,42 +1,61 @@
-import chalk from 'chalk';
 import _ from 'lodash';
+import chalk from 'chalk';
 
-const replacer = ' ';
-const signSpace = 2;
-const spacesCount = 4;
+const indent = ' ';
+const indentSize = 4;
+const currentIndent = (depth) => indent.repeat(indentSize * depth - 2);
+const braceIndent = (depth) => indent.repeat(indentSize * depth - indentSize);
 
-const indent = (depth, isFull = true) => {
-  const size = depth * spacesCount;
-  return isFull ? replacer.repeat(size) : replacer.repeat(size - signSpace);
-};
+const buildStylishTree = (lines, depth) => [
+  '{',
+  ...lines,
+  `${braceIndent(depth)}}`,
+].join('\n');
 
 const stringify = (data, depth) => {
-  if (!_.isObject(data)) { return String(data); }
-
-  const lines = Object
-    .entries(data)
-    .map(([key, value]) => `${indent(depth + 1)}${key}: ${stringify(value, depth + 1)}`);
-  return `{\n${lines.join('\n')}\n${indent(depth)}}`;
-};
-const formatNode = (prefix, color, node, depth) => {
-  const line = `${indent(depth, false)}${prefix} ${node.key}: ${stringify(node.value, depth)}`;
-  return color ? chalk[color](line) : line;
+  if ((!_.isObject(data)) || (data === null)) {
+    return String(data);
+  }
+  const keys = _.keys(data);
+  const lines = keys.map((key) => `${currentIndent(depth)}  ${key}: ${stringify(data[key], depth + 1)}`);
+  return buildStylishTree(lines, depth);
 };
 
-const formatTree = (tree, depth = 1) => tree
-  .map((node) => {
-    switch (node.type) {
+const diffStylish = (data) => {
+  const iter = (currentValue, depth) => {
+    const { type } = currentValue;
+    switch (type) {
+      case 'default': {
+        const result = currentValue.children.flatMap((child) => iter(child, depth));
+        return buildStylishTree(result, depth);
+      }
+      case 'nested': {
+        const childrenToString = currentValue.children.flatMap((child) => iter(child, depth + 1));
+        return `${currentIndent(depth)}${chalk.gray(currentValue.name)}: ${buildStylishTree(childrenToString, depth + 1)}`;
+      }
       case 'added': {
-        return formatNode('+', 'green', node, depth);
+        return `${currentIndent(depth)}${chalk.green(`+ ${currentValue.name}: ${stringify(currentValue.value, depth + 1)}`)}`;
       }
-      case 'deleted': {
-        return formatNode('-', 'red', node, depth);
+      case 'removed': {
+        return `${currentIndent(depth)}${chalk.red(`- ${currentValue.name}: ${stringify(currentValue.value, depth + 1)}`)}`;
       }
-      default:
-        return formatNode(' ', null, node, depth);
+      case 'changed': {
+        return [
+          `${currentIndent(depth)}${chalk.red(`- ${currentValue.name}: ${stringify(currentValue.value, depth + 1)}`)}`,
+          `${currentIndent(depth)}${chalk.green(`+ ${currentValue.name}: ${stringify(currentValue.value2, depth + 1)}`)}`,
+        ];
+      }
+      case 'unchanged': {
+        return [
+          `${currentIndent(depth)}  ${chalk.gray(currentValue.name)}: ${chalk.yellow(stringify(currentValue.value, depth + 2))}`,
+        ];
+      }
+      default: {
+        throw Error('Uncorrect data');
+      }
     }
-  });
+  };
+  return iter(data, 1);
+};
 
-const diffStylish = (tree) => `{\n${formatTree(tree).join('\n')}\n}`;
-
-export { diffStylish, indent, stringify };
+export default diffStylish;

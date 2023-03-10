@@ -1,4 +1,4 @@
-import { diffStylish } from './stylish.js';
+import diffStylish from './stylish.js';
 import diffPlain from './plain.js';
 
 const makeDiff = (data, format) => {
