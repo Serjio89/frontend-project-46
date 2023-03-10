@@ -1,48 +1,30 @@
 import _ from 'lodash';
 
 const buildDifference = (data1, data2) => {
-  const data1Keys = _.keys(data1);
-  const data2Keys = _.keys(data2);
-  const unitedKeys = _.union(data1Keys, data2Keys);
-  const sortedKeys = _.sortBy(unitedKeys);
+  const allKeys = _.union(_.keys(data1), _.keys(data2));
+  const sortedKeys = _.sortBy(allKeys);
 
-  const children = sortedKeys.map((key) => {
+  const getPropertyDifference = (key) => {
     if (!_.has(data1, key)) {
-      return {
-        type: 'added',
-        name: key,
-        value: data2[key],
-      };
+      return { type: 'added', name: key, value: data2[key] };
     }
     if (!_.has(data2, key)) {
-      return {
-        type: 'removed',
-        name: key,
-        value: data1[key],
-      };
+      return { type: 'removed', name: key, value: data1[key] };
     }
-    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      return {
-        type: 'nested',
-        name: key,
-        children: buildDifference(data1[key], data2[key]),
-      };
+    const value1 = data1[key];
+    const value2 = data2[key];
+    if (_.isEqual(value1, value2)) {
+      return { type: 'unchanged', name: key, value: value1 };
     }
-    if (_.isEqual(data1[key], data2[key])) {
-      return {
-        type: 'unchanged',
-        name: key,
-        value: data1[key],
-      };
+    if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
+      return { type: 'nested', name: key, children: buildDifference(value1, value2) };
     }
     return {
-      type: 'changed',
-      name: key,
-      value: data1[key],
-      value2: data2[key],
+      type: 'changed', name: key, value: value1, value2,
     };
-  });
-  return children;
+  };
+
+  return sortedKeys.map(getPropertyDifference);
 };
 
 const getDifferenceTree = (data1, data2) => ({
