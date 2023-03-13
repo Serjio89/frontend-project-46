@@ -1,13 +1,12 @@
-import yml from 'js-yaml';
-import { fileData, newPath } from './utils.js';
+import yaml from 'js-yaml';
 
-const parser = (file) => {
-  const extension = newPath(file);
-  if (extension === 'yaml' || extension === 'yml') {
-    return yml(fileData(file));
+export default (data, extention) => {
+  switch (extention) {
+    case '.json':
+      return JSON.parse(data);
+    case '.yml':
+      return yaml.load(data);
+    default:
+      return extention;
   }
-
-  return JSON.parse(fileData(file));
 };
-
-export default parser;
