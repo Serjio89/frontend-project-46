@@ -4,6 +4,10 @@
 <a href="https://codeclimate.com/github/Serjio89/frontend-project-46/maintainability"><img src="https://api.codeclimate.com/v1/badges/759b63a91d1345387436/maintainability" /></a>
 <a href="https://codeclimate.com/github/Serjio89/frontend-project-46/test_coverage"><img src="https://api.codeclimate.com/v1/badges/759b63a91d1345387436/test_coverage" /></a>
 
+## Examples
+
+### Compare two JSON files
 <a href="https://asciinema.org/a/566898" target="_blank"><img src="https://asciinema.org/a/566898.svg" /></a>
 
+### Compare two YML files
 <a href="https://asciinema.org/a/567222" target="_blank"><img src="https://asciinema.org/a/567222.svg" /></a>
