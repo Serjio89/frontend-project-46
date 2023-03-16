@@ -7,7 +7,7 @@
 ## Examples
 
 ### Compare two JSON files
-<a href="https://asciinema.org/a/566898" target="_blank"><img src="https://asciinema.org/a/566898.svg" /></a>
+<a href="https://asciinema.org/a/567639" target="_blank"><img src="https://asciinema.org/a/567639.svg" /></a>
 
 ### Compare two YML files
-<a href="https://asciinema.org/a/567222" target="_blank"><img src="https://asciinema.org/a/567222.svg" /></a>
+<a href="https://asciinema.org/a/567640" target="_blank"><img src="https://asciinema.org/a/567640.svg" /></a>
