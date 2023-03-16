@@ -3,6 +3,7 @@ import { readFile, getFixturePath, genDiff } from '../src/index.js';
 test.each([
   ['json'],
   ['yml'],
+  ['yaml'],
   // ['json', 'stylish'],
   // ['json', 'plain'],
   // ['json', 'json'],
