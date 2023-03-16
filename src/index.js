@@ -3,11 +3,11 @@ import _ from 'lodash';
 import path from 'path';
 import parse from './parsers.js';
 
-const getFixturePath = (filename) => path.resolve(`__fixtures__/${filename}`);
+export const getFixturePath = (filename) => path.resolve('__fixtures__/', filename);
 
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
+export const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
 
-const genDiff = (filepath1, filepath2) => {
+export const genDiff = (filepath1, filepath2) => {
   const extention1 = path.extname(filepath1);
   const extention2 = path.extname(filepath2);
   const data1 = readFile(filepath1, 'utf-8');
@@ -34,5 +34,3 @@ const genDiff = (filepath1, filepath2) => {
   }, []);
   return `{\n${result.join('')}}`;
 };
-
-export default genDiff;

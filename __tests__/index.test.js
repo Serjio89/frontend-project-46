@@ -1,10 +1,4 @@
-import * as fs from 'node:fs';
-import path from 'node:path';
-import genDiff from '../src/index.js';
-
-const getFixturePath = (filename) => path.resolve(`__fixtures__/${filename}`);
-
-const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf8');
+import { readFile, getFixturePath, genDiff } from '../src/index.js';
 
 test.each([
   ['json'],
