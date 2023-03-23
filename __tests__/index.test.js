@@ -1,19 +1,18 @@
-import { readFile, getFixturePath, genDiff } from '../src/index.js';
+import { readFileSync } from 'node:fs';
+import formatter from '../src/formatters/index.js';
 
-test.each([
-  ['json'],
-  ['yml'],
-  ['yaml'],
-  // ['json', 'stylish'],
-  // ['json', 'plain'],
-  // ['json', 'json'],
-  // ['yml', 'stylish'],
-  // ['yml', 'plain'],
-  // ['yml', 'json'],
-])('%s files in %s format', (fileExtension, format = 'expected_file') => {
-  const filePath1 = getFixturePath(`file1.${fileExtension}`);
-  const filePath2 = getFixturePath(`file2.${fileExtension}`);
-  const expected = readFile(`${format}.txt`);
-  const result = genDiff(filePath1, filePath2, format);
-  expect(result).toEqual(expected.trim());
+import genDiff from '../src/index.js';
+import parser from '../src/parsers.js';
+
+const stylishResult = readFileSync('__fixtures__/expected_file.txt', 'utf-8');
+
+test('testing stylish nested', () => {
+  expect(genDiff('file1.json', 'file2.json')).toBe(stylishResult);
+  expect(genDiff('file1.yaml', 'file2.yaml')).toBe(stylishResult);
+  expect(genDiff('file1.yml', 'file2.yml')).toBe(stylishResult);
+});
+
+test('should be errors', () => {
+  expect(() => (parser('randomdata', 'whoops'))).toThrow('not supported!');
+  expect(() => (formatter('randomdata', 'whoops'))).toThrow('not supported!');
 });
