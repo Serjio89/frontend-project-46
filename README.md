@@ -11,3 +11,6 @@
 
 ### Compare two YML files
 <a href="https://asciinema.org/a/567640" target="_blank"><img src="https://asciinema.org/a/567640.svg" /></a>
+
+### Compare two nested JSON files in stylish format
+<a href="https://asciinema.org/a/569468" target="_blank"><img src="https://asciinema.org/a/569468.svg" /></a>
