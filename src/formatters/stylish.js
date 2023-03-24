@@ -43,4 +43,5 @@ const formatTree = (tree, depth = 1) => tree
   });
 
 const stylishFormat = (tree) => `{\n${formatTree(tree).join('\n')}\n}`;
+
 export default stylishFormat;
