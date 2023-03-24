@@ -18,19 +18,21 @@ const stringify = (data, depth) => {
   return `{\n${lines.join('\n')}\n${indent(depth)}}`;
 };
 
+const getLineForNode = (node, depth, sign) => `${indent(depth, false)}${sign} ${node.key}: ${stringify(node.value, depth)}`;
+
 const formatTree = (tree, depth = 1) => tree
   .map((node) => {
     switch (node.type) {
       case 'added': {
-        return `${indent(depth, false)}+ ${node.key}: ${stringify(node.value, depth)}`;
+        return getLineForNode(node, depth, '+');
       }
       case 'deleted': {
-        return `${indent(depth, false)}- ${node.key}: ${stringify(node.value, depth)}`;
+        return getLineForNode(node, depth, '-');
       }
       case 'changed': {
         return [
-          `${indent(depth, false)}- ${node.key}: ${stringify(node.value1, depth)}`,
-          `${indent(depth, false)}+ ${node.key}: ${stringify(node.value2, depth)}`,
+          getLineForNode({ ...node, value: node.value1 }, depth, '-'),
+          getLineForNode({ ...node, value: node.value2 }, depth, '+'),
         ].join('\n');
       }
       case 'nested': {
