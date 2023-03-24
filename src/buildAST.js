@@ -3,10 +3,7 @@ import _ from 'lodash';
 const getValueForKey = (key, data) => (_.has(data, key) ? data[key] : undefined);
 
 const getDifference = (data1, data2) => {
-  const keys1 = _.keys(data1);
-  const keys2 = _.keys(data2);
-  const unionKeys = _.union(keys1, keys2);
-  const sortedKeys = _.sortBy(unionKeys);
+  const sortedKeys = _.sortBy(_.uniq([..._.keysIn(data1), ..._.keysIn(data2)]));
 
   const result = sortedKeys.reduce((acc, key) => {
     const value1 = getValueForKey(key, data1);
