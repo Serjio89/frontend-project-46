@@ -17,3 +17,6 @@
 
 ### Compare two nested files in PLAIN format
 <a href="https://asciinema.org/a/569819" target="_blank"><img src="https://asciinema.org/a/569819.svg" /></a>
+
+### Compare two nested files in JSON format
+<a href="https://asciinema.org/a/570083" target="_blank"><img src="https://asciinema.org/a/570083.svg" /></a>
