@@ -3,29 +3,38 @@ import formatter from '../src/formatters/index.js';
 import genDiff from '../src/index.js';
 import parser from '../src/parsers.js';
 
-const stylishResult = readFileSync('__fixtures__/expected_file_stylish.txt', 'utf-8');
-const plainResult = readFileSync('__fixtures__/expected_file_plain.txt', 'utf-8');
-const jsonResult = readFileSync('__fixtures__/expected_file_json.txt', 'utf-8');
+const expectedStylish = readFileSync('__fixtures__/expected_file_stylish.txt', 'utf-8');
+const expectedPlain = readFileSync('__fixtures__/expected_file_plain.txt', 'utf-8');
+const expectedJson = readFileSync('__fixtures__/expected_file_json.txt', 'utf-8');
 
-test('testing stylish nested', () => {
-  expect(genDiff('file1.json', 'file2.json')).toBe(stylishResult);
-  expect(genDiff('file1.yaml', 'file2.yaml')).toBe(stylishResult);
-  expect(genDiff('file1.yml', 'file2.yml')).toBe(stylishResult);
+describe('genDiff', () => {
+  test('stylish format', () => {
+    expect(genDiff('file1.json', 'file2.json')).toEqual(expectedStylish);
+    expect(genDiff('file1.yaml', 'file2.yaml')).toEqual(expectedStylish);
+    expect(genDiff('file1.yml', 'file2.yml')).toEqual(expectedStylish);
+  });
+
+  test('plain format', () => {
+    expect(genDiff('file1.json', 'file2.json', 'plain')).toEqual(expectedPlain);
+    expect(genDiff('file1.yaml', 'file2.yaml', 'plain')).toEqual(expectedPlain);
+    expect(genDiff('file1.yml', 'file2.yml', 'plain')).toEqual(expectedPlain);
+  });
+
+  test('json format', () => {
+    expect(genDiff('file1.json', 'file2.json', 'json')).toEqual(expectedJson);
+    expect(genDiff('file1.yaml', 'file2.yaml', 'json')).toEqual(expectedJson);
+    expect(genDiff('file1.yml', 'file2.yml', 'json')).toEqual(expectedJson);
+  });
 });
 
-test('testing plain nested', () => {
-  expect(genDiff('file1.json', 'file2.json', 'plain')).toBe(plainResult);
-  expect(genDiff('file1.yaml', 'file2.yaml', 'plain')).toBe(plainResult);
-  expect(genDiff('file1.yml', 'file2.yml', 'plain')).toBe(plainResult);
+describe('parser', () => {
+  test('not supported format', () => {
+    expect(() => parser('data', 'error')).toThrow('not supported');
+  });
 });
 
-test('testing json nested', () => {
-  expect(genDiff('file1.json', 'file2.json', 'json')).toBe(jsonResult);
-  expect(genDiff('file1.yaml', 'file2.yaml', 'json')).toBe(jsonResult);
-  expect(genDiff('file1.yml', 'file2.yml', 'json')).toBe(jsonResult);
-});
-
-test('should be errors', () => {
-  expect(() => (parser('randomdata', 'whoops'))).toThrow('not supported!');
-  expect(() => (formatter('randomdata', 'whoops'))).toThrow('not supported!');
+describe('formatter', () => {
+  test('not supported format', () => {
+    expect(() => formatter('data', 'error')).toThrow('not supported');
+  });
 });
