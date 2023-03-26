@@ -27,19 +27,50 @@ cd frontend-project-46
 make install
 ```
 
+### Вывод окна помощи
+```
+gendiff -h
+```
+`
+Usage: gendiff [options] <filepath1> <filepath2>
+
+Compares two configuration files and shows a difference.
+
+Options:
+  -V, --version        output the version number
+  -f, --format [type]  output format
+  -h, --help           output usage information
+`
+
 ## Примеры использования
 
 ### Сравнение плоских файлов (JSON)
+```
+gendiff file1.json file2.json
+```
 <a href="https://asciinema.org/a/567639" target="_blank"><img src="https://asciinema.org/a/567639.svg" /></a>
 
-### Сравнение плоских файлов (yml)
+
+### Сравнение плоских файлов (yaml)
+```
+gendiff file1.yml file2.yml
+```
 <a href="https://asciinema.org/a/567640" target="_blank"><img src="https://asciinema.org/a/567640.svg" /></a>
 
 ### Рекурсивное сравнение с выводом в STYLISH формате
+```
+gendiff file1.json file2.json
+``` 
 <a href="https://asciinema.org/a/569468" target="_blank"><img src="https://asciinema.org/a/569468.svg" /></a>
 
 ### Рекурсивное сравнение с выводом в PLAIN формате
+```
+gendiff --format plain file1.json file2.json
+```
 <a href="https://asciinema.org/a/569819" target="_blank"><img src="https://asciinema.org/a/569819.svg" /></a>
 
 ### Рекурсивное сравнение с выводом в JSON формате
+```
+gendiff --format json file1.json file2.json
+```
 <a href="https://asciinema.org/a/570083" target="_blank"><img src="https://asciinema.org/a/570083.svg" /></a>
